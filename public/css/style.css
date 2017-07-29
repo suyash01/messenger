@@ -1,0 +1,37 @@
+html, body, .container, .row, .col-md-4, .col-md-8, .panel{
+    height: 100%;
+}
+
+.container{
+    display: none;
+}
+
+.panel{
+    margin: 0;
+    max-height: 100%;
+    position: relative;
+}
+
+.panel-body{
+    overflow: auto;
+    position: absolute;
+    top: 40px;
+    bottom: 30px;
+    left: 0;
+    right: 0;
+}
+
+.panel-footer{
+    position: absolute;
+    bottom: 0;
+}
+
+.alert-success{
+    display: inline-block;
+    padding: 5px 15px;
+}
+
+.alert-warning, .alert-danger{
+    text-align: center;
+    padding: 5px 15px;
+}

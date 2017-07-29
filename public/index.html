@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <title>Messenger</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">Online Users<span class="badge" id="numUser" style="float: right;"></span></div>
+                    <div class="panel-body">
+                        <ul class="list-group" id="users">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><span class="glyphicon glyphicon-comment"></span> Chat</div>
+                    <div class="panel-body" id="chat"></div>
+                    <div class="panel-footer">
+                        <form id="msgForm">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="msg" autocomplete="off" placeholder="Enter Message..." required>
+                                <span class="input-group-btn">
+                                    <button type="submit" class="btn btn-success"><span class="glyphicon glyphicon-send"></span> Send</button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="userModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Enter Username</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="userForm">
+                        <div class="input-group">
+                            <input type="text" class="form-control" id="uname" autocomplete="off" placeholder="Enter Username" required autofocus>
+                            <span class="input-group-btn">
+                                <button type="submit" class="btn btn-primary">Enter</button>
+                            </span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
