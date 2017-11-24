@@ -10,39 +10,28 @@ const port = process.env.PORT || 3000;
 
 app.use(express.static(path.join(__dirname, '/public')));
 
-users = [];
-numConnections = 0;
+users = {};
 
-io.on('connection', function(socket){
-    numConnections++;
-    console.log('Connections: '+numConnections);
+io.on('connection', function(client){
 
-    socket.on('disconnect', function(){
-        numConnections--;
-        users.splice(users.indexOf(socket.username), 1);
-        console.log('Connections: '+numConnections);
-        console.log('Users Connected: '+users.length);
-        io.emit('user left', {
-            users: users,
-            user: socket.username
-        });
+    client.on('disconnect', function(){
+        io.emit('notification', 1, users[client.id]);
+        delete users[client.id];
+        console.log('Users Online: ' + Object.keys(users).length);
+        io.emit('update users', users);
     });
 
-    socket.on('new message', function(msg){
-        io.emit('new message', {
-            user: socket.username,
-            msg: msg
-        });
+    client.on('message', function(msg){
+        io.emit('message', users[client.id], msg);
     });
 
-    socket.on('user join', function(user){
-        socket.username = user;
-        users.push(user);
-        console.log('Users Connected: '+users.length);
-        io.emit('new user', {
-            users: users,
-            user: user
-        });
+    client.on('join', function(name){
+        if(name != "" && name != null && name != undefined){
+            users[client.id] = name;
+            console.log('Users Online: ' + Object.keys(users).length);
+            io.emit('update users', users);
+            io.emit('notification', 0, users[client.id]);
+        }
     });
 });
 

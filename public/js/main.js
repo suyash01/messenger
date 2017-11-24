@@ -1,43 +1,47 @@
 $(function () {
     var socket = io();
 
-    //Message emit
+    //Sending new message
     $('#msgForm').submit(function(){
-        socket.emit('new message', $('#msg').val());
+        socket.emit('message', $('#msg').val());
         $('#msg').val('');
         return false;
     });
-    socket.on('new message', function(data){
-        $('#chat').append('<div class="alert alert-success"><b>'+data.user+': </b>'+data.msg+'</div><br>');
+
+    //Receiving new message
+    socket.on('message', function(name, msg){
+        $('#chat').append('<div class="alert alert-success"><b>'+name+'</b><br>'+msg+'</div><br>');
         var chat = document.getElementById("chat");
         chat.scrollTop = chat.scrollHeight;
     });
 
     //Username emit
     $('#userForm').submit(function(){
-        socket.emit('user join', $('#uname').val());
-        $('#userModal').modal('hide');
-        $('.container').show();
+        var name = $('#uname').val();
+        if(name != "" && name != null && name != undefined){
+            socket.emit('join', name);
+            $('#userModal').modal('hide');
+            $('.container').show();
+        }
         return false;
     });
-    socket.on('new user', function(data){
+
+    //Updating the online user list
+    socket.on('update users', function(users){
         var html = '';
-        for(i=0;i<data.users.length;i++){
-            html += '<li class="list-group-item">'+data.users[i]+'</li>';
-        }
-        $('#numUser').text(data.users.length);
+        for(var key in users)
+            if(users.hasOwnProperty(key))
+                html += '<li class="list-group-item">'+users[key]+'</li>';
+        $('#numUser').text(Object.keys(users).length);
         $('#users').html(html);
-        $('#chat').append('<div class="alert alert-warning"><b>'+data.user+'</b> joined the chat</div>');
     });
 
-    socket.on('user left', function(data){
-        var html = '';
-        for(i=0;i<data.users.length;i++){
-            html += '<li class="list-group-item">'+data.users[i]+'</li>';
-        }
-        $('#numUser').text(data.users.length);
-        $('#users').html(html);
-        $('#chat').append('<div class="alert alert-danger"><b>'+data.user+'</b> left the chat</div>')
+    //Notification handling
+    socket.on('notification', function(type, name){
+        if(type)
+            $('#chat').append('<div class="alert alert-danger"><b>'+name+'</b> left the chat</div>');
+        else
+            $('#chat').append('<div class="alert alert-warning"><b>'+name+'</b> joined the chat</div>')
     });
 });
 
